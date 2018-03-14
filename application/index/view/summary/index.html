@@ -1,0 +1,343 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>比邻小镇后台管理系统 - Beelintown</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="icon" type="image/png" href="/static/assets/i/favicon.png">
+  <link rel="apple-touch-icon-precomposed" href="/static/assets/i/app-icon72x72@2x.png">
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+  <link rel="stylesheet" href="/static/assets/css/amazeui.min.css"/>
+  <link rel="stylesheet" href="/static/assets/css/admin.css">
+  <link rel="stylesheet" href="/static/assets/css/jquery.xctips.css">
+  <script type="text/javascript" src="/static/assets/js/jquery.xctips.js"></script>
+	<script src="/static/assets/js/echarts.common.min.js"></script>
+</head>
+<body>
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+
+<header class="am-topbar admin-header">
+  <div class="am-topbar-brand">
+    <img src="/static/images/logo.png"><strong>比邻小镇</strong> <small>后台管理</small>
+  </div>
+
+  <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+  <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+
+    <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list">
+      <li><a href="javascript:;"><span class="am-icon-envelope-o"></span> 待处理事件 <span class="am-badge am-badge-warning">{$total_pending_count}</span></a></li>
+      <li class="am-dropdown" data-am-dropdown>
+        <a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+          <span class="am-icon-users"></span> {$admin_realname} <span class="am-icon-caret-down"></span>
+        </a>
+        <ul class="am-dropdown-content">
+          <li><a href="/index/adminuser/changepassword"><span class="am-icon-cog"></span> 设置</a></li>
+          <li><a href="/index/login/logout"><span class="am-icon-power-off"></span> 退出</a></li>
+        </ul>
+      </li>
+      <li><a href="javascript:;" id="admin-fullscreen"><span class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="am-cf admin-main">
+  <!-- sidebar start -->
+  <div class="admin-sidebar">
+    <ul class="am-list admin-sidebar-list">
+      <li><a href="/index/dashboard"><span class="am-icon-home"></span> 首页</a></li>
+      <li class="admin-parent">
+        <a class="am-cf" data-am-collapse="{target: '#collapse-nav'}"><span class="am-icon-file"></span> 问题管理 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+        <ul class="am-list am-collapse admin-sidebar-sub am-in" id="collapse-nav">
+          <li><a href="/index/arbitrate" class="am-cf"><span class="am-icon-balance-scale am-icon-fw"></span> 问题仲裁 <span class="am-badge am-badge-warning">{if condition="$pending_arbitrate_count>0"}{$pending_arbitrate_count}{/if}</span></a></li>
+          <li><a href="/index/qnareport"><span class="am-icon-warning am-icon-fw"></span> 举报处理 <span class="am-badge am-badge-warning">{if condition="$pending_report_count>0"}{$pending_report_count}{/if}</span></a></li>
+        </ul>
+      </li>
+      <li class="admin-parent">
+        <a class="am-cf" data-am-collapse="{target: '#collapse-nav'}"><span class="am-icon-money"></span> 比邻币管理 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+        <ul class="am-list am-collapse admin-sidebar-sub am-in" id="collapse-nav">
+          <li><a href="/index/extractcoins" class="am-cf"><span class="am-icon-credit-card-alt am-icon-fw"></span> 提现管理 <span class="am-badge am-badge-warning">{if condition="$pending_extract_count>0"}{$pending_extract_count}{/if}</span></a></li>
+          <li><a href="/index/summary"><span class="am-icon-line-chart am-icon-fw"></span> 交易统计<span class="am-icon-star am-fr am-margin-right admin-icon-yellow"></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/index/userlist"><span class="am-icon-users am-icon-fw"></span> 用户管理</a></li>
+      <li><a href="/index/taglist"><span class="am-icon-sticky-note-o am-icon-fw"></span> 标签管理</a></li>
+      <li><a href="/index/adslist"><span class="am-icon-eye am-icon-fw"></span> 广告管理</a></li>
+      {if condition="$admin_type=='1'"}
+      <li><a href="/index/adminuser"><span class="am-icon-user-secret am-icon-fw"></span> 账户管理</a></li>
+      {/if}
+    </ul>
+
+    <div class="am-panel am-panel-default admin-sidebar-panel">
+      <div class="am-panel-bd">
+        <p><span class="am-icon-bookmark"></span> 公告</p>
+        <p>管理后台全面上线测试中 —— 开发团队</p>
+      </div>
+    </div>
+
+  </div>
+  <!-- sidebar end -->
+
+  <!-- content start -->
+  <div class="admin-content">
+
+    <div class="am-cf am-padding">
+      <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">交易统计</strong> | 最后更新时间：<strong>{$last_update}</strong></div>
+      <div class="am-fr am-padding-right"></div>
+    </div>
+
+    <div class="am-g">
+      <div class="am-u-sm-10 am-u-lg-centered">
+      	<div><i class="am-icon-users am-icon-fw"></i> 当前用户总数： <strong>{$user_count}</strong></div>
+        <div><i class="am-icon-line-chart am-icon-fw"></i> 数据统计：</div>
+        <div style="height:20px;"></div>
+        <div id="viewUsers" style="width:100%;height:400px;"></div>
+        <div style="height:30px;"></div>
+        
+      	<div><i class="am-icon-question-circle am-icon-fw"></i> 当前问题总数/回答采纳总数： <strong>{$qna_count} / {$accept_reply_count}</strong></div>
+        <div><i class="am-icon-line-chart am-icon-fw"></i> 数据统计：</div>
+        <div style="height:20px;"></div>
+        <div id="viewQnas" style="width:100%;height:400px;"></div>
+        <div style="height:30px;"></div>
+        
+      	<div><i class="am-icon-balance-scale am-icon-fw"></i> 当前仲裁总数： <strong>{$arbitrate_count}</strong></div>
+        <div><i class="am-icon-line-chart am-icon-fw"></i> 数据统计：</div>
+        <div style="height:20px;"></div>
+        <div id="viewArbitrates" style="width:100%;height:400px;"></div>
+        <div style="height:30px;"></div>
+        
+      	<div><i class="am-icon-bitcoin am-icon-fw"></i> 当前比邻币发放总金额/佣金收入总金额： <strong>{$coins_total} / {$commission_total}</strong></div>
+        <div><i class="am-icon-line-chart am-icon-fw"></i> 数据统计：</div>
+        <div style="height:20px;"></div>
+        <div id="viewCoins" style="width:100%;height:400px;"></div>
+        <div style="height:30px;"></div>
+        
+      	<div><i class="am-icon-bank am-icon-fw"></i> 当前提现总金额/充值总金额： <strong>{$extract_total} / {$recharge_total}</strong></div>
+        <div><i class="am-icon-line-chart am-icon-fw"></i> 数据统计：</div>
+        <div style="height:20px;"></div>
+        <div id="viewExtracts" style="width:100%;height:400px;"></div>
+        <div style="height:30px;"></div>
+      </div>
+    </div>
+  </div>
+        <script type="text/javascript">
+		
+		//用户数图表
+		var viewUsers = echarts.init(document.getElementById('viewUsers'));
+		
+		var option = {
+			title: {
+				text: '用户增长数据统计'
+			},
+			tooltip: {
+				trigger: 'axis'
+			},
+			toolbox: {
+				feature: {
+					magicType: {show: true, type: ['line', 'bar']},
+					restore: {show: true},
+					saveAsImage: {show: true}
+				}
+			},
+			legend: {
+				data:['用户数']
+			},
+			xAxis: {
+				data: [{$Dates}]
+			},
+			yAxis: {},
+			series: [{
+				name: '用户数',
+				type: 'bar',
+				itemStyle : { normal: {label : {show: true}}},
+				data: [{$userNums}]
+			}]
+		};
+        // 使用刚指定的配置项和数据显示图表。
+        viewUsers.setOption(option);
+		
+		//问题数图表
+		var viewQnas = echarts.init(document.getElementById('viewQnas'));
+		
+		var option = {
+			title: {
+				text: '问题增长数据统计'
+			},
+			tooltip: {
+				trigger: 'axis'
+			},
+			toolbox: {
+				feature: {
+					magicType: {show: true, type: ['line', 'bar']},
+					restore: {show: true},
+					saveAsImage: {show: true}
+				}
+			},
+			legend: {
+				data:['问题数','回答采纳数']
+			},
+			xAxis: {
+				data: [{$Dates}]
+			},
+			yAxis: {},
+			series: [{
+				name: '问题数',
+				type: 'bar',
+				itemStyle : { normal: {label : {show: true}}},
+				data: [{$qnaNums}]
+			},
+			{
+				name: '回答采纳数',
+				type: 'bar',
+				itemStyle : { normal: {label : {show: true}}},
+				data: [{$replyNums}]
+			}]
+		};
+        // 使用刚指定的配置项和数据显示图表。
+        viewQnas.setOption(option);
+		
+		//仲裁数图表
+		var viewArbitrates = echarts.init(document.getElementById('viewArbitrates'));
+		
+		var option = {
+			title: {
+				text: '仲裁增长数据统计'
+			},
+			tooltip: {
+				trigger: 'axis'
+			},
+			toolbox: {
+				feature: {
+					magicType: {show: true, type: ['line', 'bar']},
+					restore: {show: true},
+					saveAsImage: {show: true}
+				}
+			},
+			legend: {
+				data:['仲裁数']
+			},
+			xAxis: {
+				data: [{$Dates}]
+			},
+			yAxis: {},
+			series: [{
+				name: '仲裁数',
+				type: 'bar',
+				itemStyle : { normal: {label : {show: true}}},
+				data: [{$arbitrateNums}]
+			}]
+		};
+        // 使用刚指定的配置项和数据显示图表。
+        viewArbitrates.setOption(option);
+		
+		//比邻币发放/佣金收入图表
+		var viewCoins = echarts.init(document.getElementById('viewCoins'));
+		
+		var option = {
+			title: {
+				text: '比邻币数据统计'
+			},
+			tooltip: {
+				trigger: 'axis'
+			},
+			toolbox: {
+				feature: {
+					magicType: {show: true, type: ['line', 'bar']},
+					restore: {show: true},
+					saveAsImage: {show: true}
+				}
+			},
+			legend: {
+				data:['发放金额','佣金收入金额']
+			},
+			xAxis: {
+				data: [{$Dates}]
+			},
+			yAxis: {},
+			series: [{
+				name: '发放金额',
+				type: 'bar',
+				itemStyle : { normal: {label : {show: true}}},
+				data: [{$coinsTotal}]
+			},
+			{
+				name: '佣金收入金额',
+				type: 'bar',
+				itemStyle : { normal: {label : {show: true}}},
+				data: [{$commissionTotal}]
+			}]
+		};
+        // 使用刚指定的配置项和数据显示图表。
+        viewCoins.setOption(option);
+		
+		//提现/充值数图表
+		var viewExtracts = echarts.init(document.getElementById('viewExtracts'));
+		
+		var option = {
+			title: {
+				text: '提现/充值数据统计'
+			},
+			tooltip: {
+				trigger: 'axis'
+			},
+			toolbox: {
+				feature: {
+					magicType: {show: true, type: ['line', 'bar']},
+					restore: {show: true},
+					saveAsImage: {show: true}
+				}
+			},
+			legend: {
+				data:['提现金额','充值金额']
+			},
+			xAxis: {
+				data: [{$Dates}]
+			},
+			yAxis: {},
+			series: [{
+				name: '提现金额',
+				type: 'bar',
+				itemStyle : { normal: {label : {show: true}}},
+				data: [{$extractTotal}]
+			},
+			{
+				name: '充值金额',
+				type: 'bar',
+				itemStyle : { normal: {label : {show: true}}},
+				data: [{$rechargeTotal}]
+			}]
+		};
+        // 使用刚指定的配置项和数据显示图表。
+        viewExtracts.setOption(option);
+		
+		</script>
+  <!-- content end -->
+
+</div>
+
+<footer>
+  <hr>
+</footer>
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="/static/assets/js/polyfill/rem.min.js"></script>
+<script src="/static/assets/js/polyfill/respond.min.js"></script>
+<script src="/static/assets/js/amazeui.legacy.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="/static/assets/js/jquery.min.js"></script>
+<script src="/static/assets/js/amazeui.min.js"></script>
+<!--<![endif]-->
+<script src="/static/assets/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>比邻小镇后台管理系统 - Beelintown</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="icon" type="image/png" href="/static/assets/i/favicon.png">
+  <link rel="apple-touch-icon-precomposed" href="/static/assets/i/app-icon72x72@2x.png">
+  <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+  <link rel="stylesheet" href="/static/assets/css/amazeui.min.css"/>
+  <link rel="stylesheet" href="/static/assets/css/admin.css">
+  <link rel="stylesheet" href="/static/assets/css/jquery.xctips.css">
+  <script src='http://libs.baidu.com/jquery/1.8.3/jquery.min.js'></script>
+  <script type="text/javascript" src="/static/assets/js/jquery.xctips.js"></script>
+</head>
+<body>
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+
+<header class="am-topbar admin-header">
+  <div class="am-topbar-brand">
+    <img src="/static/images/logo.png"><strong>比邻小镇</strong> <small>后台管理</small>
+  </div>
+
+  <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+  <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+
+    <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list">
+      <li><a href="javascript:;"><span class="am-icon-envelope-o"></span> 待处理事件 <span class="am-badge am-badge-warning">{$total_pending_count}</span></a></li>
+      <li class="am-dropdown" data-am-dropdown>
+        <a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+          <span class="am-icon-users"></span> {$admin_realname} <span class="am-icon-caret-down"></span>
+        </a>
+        <ul class="am-dropdown-content">
+          <li><a href="/index/adminuser/changepassword"><span class="am-icon-cog"></span> 设置</a></li>
+          <li><a href="/index/login/logout"><span class="am-icon-power-off"></span> 退出</a></li>
+        </ul>
+      </li>
+      <li><a href="javascript:;" id="admin-fullscreen"><span class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="am-cf admin-main">
+  <!-- sidebar start -->
+  <div class="admin-sidebar">
+    <ul class="am-list admin-sidebar-list">
+      <li><a href="/index/dashboard"><span class="am-icon-home"></span> 首页</a></li>
+      <li class="admin-parent">
+        <a class="am-cf" data-am-collapse="{target: '#collapse-nav'}"><span class="am-icon-file"></span> 问题管理 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+        <ul class="am-list am-collapse admin-sidebar-sub am-in" id="collapse-nav">
+          <li><a href="/index/arbitrate" class="am-cf"><span class="am-icon-balance-scale am-icon-fw"></span> 问题仲裁 <span class="am-badge am-badge-warning">{if condition="$pending_arbitrate_count>0"}{$pending_arbitrate_count}{/if}</span></a></li>
+          <li><a href="/index/qnareport"><span class="am-icon-warning am-icon-fw"></span> 举报处理 <span class="am-badge am-badge-warning">{if condition="$pending_report_count>0"}{$pending_report_count}{/if}</span></a></li>
+        </ul>
+      </li>
+      <li class="admin-parent">
+        <a class="am-cf" data-am-collapse="{target: '#collapse-nav'}"><span class="am-icon-money"></span> 比邻币管理 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+        <ul class="am-list am-collapse admin-sidebar-sub am-in" id="collapse-nav">
+          <li><a href="/index/extractcoins" class="am-cf"><span class="am-icon-credit-card-alt am-icon-fw"></span> 提现管理 <span class="am-badge am-badge-warning">{if condition="$pending_extract_count>0"}{$pending_extract_count}{/if}</span><span class="am-icon-star am-fr am-margin-right admin-icon-yellow"></span></a></li>
+          <li><a href="/index/summary"><span class="am-icon-line-chart am-icon-fw"></span> 交易统计</a></li>
+        </ul>
+      </li>
+      <li><a href="/index/userlist"><span class="am-icon-users am-icon-fw"></span> 用户管理</a></li>
+      <li><a href="/index/taglist"><span class="am-icon-sticky-note-o am-icon-fw"></span> 标签管理</a></li>
+      <li><a href="/index/adslist"><span class="am-icon-eye am-icon-fw"></span> 广告管理</a></li>
+      {if condition="$admin_type=='1'"}
+      <li><a href="/index/adminuser"><span class="am-icon-user-secret am-icon-fw"></span> 账户管理</a></li>
+      {/if}
+    </ul>
+
+    <div class="am-panel am-panel-default admin-sidebar-panel">
+      <div class="am-panel-bd">
+        <p><span class="am-icon-bookmark"></span> 公告</p>
+        <p>管理后台全面上线测试中 —— 开发团队</p>
+      </div>
+    </div>
+
+  </div>
+  <!-- sidebar end -->
+
+  <!-- content start -->
+  <div class="admin-content">
+
+    <div class="am-cf am-padding">
+      <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">比邻币管理</strong> / <small>提现管理</small></div>
+      <div class="am-fr am-padding-right"><span class="am-icon-check-square-o am-icon-md"></span> <a href="/index/extractcoins/updatedExtract">查看已处理提现记录</a></div>
+    </div>
+
+    <div class="am-g">
+      <div class="am-u-sm-12">
+        <table class="am-table am-table-bd am-table-striped admin-content-table">
+          <thead>
+          <tr>
+            <th>提现日期</th><th>用户名</th><th>流水号</th><th>比邻币(总额/冻结中)</th><th>提现金额</th><th>钱包地址</th><th>状态</th><th>管理</th>
+          </tr>
+          </thead>
+          <tbody>
+          {volist name="tran_list" id="trans" empty="<tr><td colspan='7'>目前还没有未处理的提现申请记录</td></tr>"}
+          {switch name="trans.extract_status"}
+              {case value='0'}
+          <tr id="tr{$i}">
+              {/case}
+              {case value='1'}
+          <tr id="tr{$i}" class="am-active">
+              {/case}
+              {case value='2'}
+          <tr id="tr{$i}" class="am-success">
+              {/case}
+              {case value='3'}
+          <tr id="tr{$i}" class="am-warning">
+              {/case}
+              {default /}
+          <tr id="tr{$i}">
+            {/switch}
+          <td>{$trans.transaction_date}</td><td>{$trans.username}</td><td>{$trans.serial_number}</td><td>{$trans.user_coins}/{$trans.user_frozen_coins}</td><td>{$trans.formatCoins}</td><td>{$trans.wallet_address}</td><td><span id="extract_desc{$i}">{$trans.statusDesc}</span></td>
+            <td>
+              <div class="am-dropdown" id="extract_manage{$i}" data-am-dropdown>
+                <button class="am-btn am-btn-default am-btn-xs am-dropdown-toggle" data-am-dropdown-toggle><span class="am-icon-cog"></span> <span class="am-icon-caret-down"></span></button>
+                <ul class="am-dropdown-content">
+                  <li><a href="javascript:chkExtract('{$trans.transactionid}',1,'{$trans.serial_number}',{$i});">1. 受理</a></li>
+                  <li><a href="javascript:chkExtract('{$trans.transactionid}',2,'{$trans.serial_number}',{$i});">2. 通过</a></li>
+                  <li><a href="javascript:chkExtract('{$trans.transactionid}',3,'{$trans.serial_number}',{$i});">3. 拒绝</a></li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+          {/volist}
+          </tbody>
+        </table>
+        <span class="am-fr">{$tran_list->render()}</span>
+      </div>
+    </div>
+  </div>
+  <!-- content end -->
+
+</div>
+
+<footer>
+  <hr>
+</footer>
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/polyfill/rem.min.js"></script>
+<script src="assets/js/polyfill/respond.min.js"></script>
+<script src="assets/js/amazeui.legacy.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="/static/assets/js/amazeui.min.js"></script>
+<!--<![endif]-->
+<script src="/static/assets/js/app.js"></script>
+<script src="/static/assets/js/extractcoins.js"></script>
+</body>
+</html>

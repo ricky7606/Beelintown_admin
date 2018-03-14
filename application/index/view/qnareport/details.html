@@ -1,0 +1,250 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>比邻小镇后台管理系统 - Beelintown</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="icon" type="image/png" href="/static/assets/i/favicon.png">
+  <link rel="apple-touch-icon-precomposed" href="/static/assets/i/app-icon72x72@2x.png">
+  <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+  <link rel="stylesheet" href="/static/assets/css/amazeui.min.css"/>
+  <link rel="stylesheet" href="/static/assets/css/admin.css">
+  <link rel="stylesheet" href="/static/assets/css/common.css">
+  <link rel="stylesheet" href="/static/assets/css/jquery.xctips.css">
+  <script src='http://libs.baidu.com/jquery/1.8.3/jquery.min.js'></script>
+  <script type="text/javascript" src="/static/assets/js/jquery.xctips.js"></script>
+</head>
+<body>
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+
+<header class="am-topbar admin-header">
+  <div class="am-topbar-brand">
+    <img src="/static/images/logo.png"><strong>比邻小镇</strong> <small>后台管理</small>
+  </div>
+
+  <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+  <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+
+    <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list">
+      <li><a href="javascript:;"><span class="am-icon-envelope-o"></span> 待处理事件 <span class="am-badge am-badge-warning">{$total_pending_count}</span></a></li>
+      <li class="am-dropdown" data-am-dropdown>
+        <a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+          <span class="am-icon-users"></span> {$admin_realname} <span class="am-icon-caret-down"></span>
+        </a>
+        <ul class="am-dropdown-content">
+          <li><a href="/index/adminuser/changepassword"><span class="am-icon-cog"></span> 设置</a></li>
+          <li><a href="/index/login/logout"><span class="am-icon-power-off"></span> 退出</a></li>
+        </ul>
+      </li>
+      <li><a href="javascript:;" id="admin-fullscreen"><span class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="am-cf admin-main">
+  <!-- sidebar start -->
+  <div class="admin-sidebar">
+    <ul class="am-list admin-sidebar-list">
+      <li><a href="/index/dashboard"><span class="am-icon-home"></span> 首页</a></li>
+      <li class="admin-parent">
+        <a class="am-cf" data-am-collapse="{target: '#collapse-nav'}"><span class="am-icon-file"></span> 问题管理 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+        <ul class="am-list am-collapse admin-sidebar-sub am-in" id="collapse-nav">
+          <li><a href="/index/arbitrate" class="am-cf"><span class="am-icon-balance-scale am-icon-fw"></span> 问题仲裁 <span class="am-badge am-badge-warning">{if condition="$pending_arbitrate_count>0"}{$pending_arbitrate_count}{/if}</span></a></li>
+          <li><a href="/index/qnareport"><span class="am-icon-warning am-icon-fw"></span> 举报处理 <span class="am-badge am-badge-warning">{if condition="$pending_report_count>0"}{$pending_report_count}{/if}</span><span class="am-icon-star am-fr am-margin-right admin-icon-yellow"></span></a></li>
+        </ul>
+      </li>
+      <li class="admin-parent">
+        <a class="am-cf" data-am-collapse="{target: '#collapse-nav'}"><span class="am-icon-money"></span> 比邻币管理 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+        <ul class="am-list am-collapse admin-sidebar-sub am-in" id="collapse-nav">
+          <li><a href="/index/extractcoins" class="am-cf"><span class="am-icon-credit-card-alt am-icon-fw"></span> 提现管理 <span class="am-badge am-badge-warning">{if condition="$pending_extract_count>0"}{$pending_extract_count}{/if}</span></a></li>
+          <li><a href="/index/summary"><span class="am-icon-line-chart am-icon-fw"></span> 交易统计</a></li>
+        </ul>
+      </li>
+      <li><a href="/index/userlist"><span class="am-icon-users am-icon-fw"></span> 用户管理</a></li>
+      <li><a href="/index/taglist"><span class="am-icon-sticky-note-o am-icon-fw"></span> 标签管理</a></li>
+      <li><a href="/index/adslist"><span class="am-icon-eye am-icon-fw"></span> 广告管理</a></li>
+      {if condition="$admin_type=='1'"}
+      <li><a href="/index/adminuser"><span class="am-icon-user-secret am-icon-fw"></span> 账户管理</a></li>
+      {/if}
+    </ul>
+
+    <div class="am-panel am-panel-default admin-sidebar-panel">
+      <div class="am-panel-bd">
+        <p><span class="am-icon-bookmark"></span> 公告</p>
+        <p>管理后台全面上线测试中 —— 开发团队</p>
+      </div>
+    </div>
+
+  </div>
+  <!-- sidebar end -->
+
+  <!-- content start -->
+  <div class="admin-content">
+
+    <div class="am-cf am-padding">
+      <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">举报管理</strong> / <small>详情</small></div>
+      <div class="am-fr am-padding-right"><span class="am-icon-chevron-circle-left am-icon-md"></span> <a href="/index/qnareport">返回</a></div>
+    </div>
+	
+    <div class="am-g">
+    <div class="am-u-sm-11 am-u-sm-centered">
+    <!-- 举报处理区域 -->
+            <div class="content_box" id="report">
+            <strong class="am-text-primary">举报处理选项：</strong>
+            <div class="am-g">
+  				<div class="am-u-sm-3">
+				举报是否成立：<br />
+                <input name="result_type_text" type="radio" onclick="chkReportType(1);" {if condition="$report_detail.result_type == 1"}checked{/if}> 不成立 <br />
+                <input name="result_type_text" type="radio" onclick="chkReportType(2);" {if condition="$report_detail.result_type == 2"}checked{/if}> 成立，内容将被屏蔽 <br />
+                </div>
+  				<div class="am-u-sm-5">
+                举报处理说明：
+                <textarea name="result_comment" id="result_comment" rows="2" placeholder="200字以内，可选填。如举报不成立，该说明仅对举报者可见，如举报成立，该说明对双方都可见。" style="width:100%;">{$report_detail.result_comment}</textarea>
+                </div>
+  				<div class="am-u-sm-4">
+                <button type="button" class="am-btn am-btn-primary am-btn-block" name="submitbtn" id="submitbtn"><i class="am-icon-balance-scale"></i> 作出举报处理</button>
+                </div>
+			</div>
+            </div>
+    <!-- 举报处理区域结束 -->
+    <div style="height:10px;"></div>
+    <!-- 举报内容 -->
+            <div class="content_box" id="report">
+            <strong class="am-text-primary">举报内容：</strong>
+            <div class="am-g">
+  				<div class="am-u-sm-3">
+				举报日期：{$report_detail.report_date}<br />
+                举报类别：{$report_detail.report_type_desc}
+                </div>
+  				<div class="am-u-sm-9">
+                举报用户：<a href="http://www.beelintown.com.cn/userreplydetail?userid={$report_detail.userid}" target="_blank">{$report_detail.username}</a> | {$report_detail.mobile} {if condition="$report_detail.email != ''"} | {$report_detail.email}{/if}<br />
+                举报说明：
+                {$report_detail.report_comment}
+                </div>
+			</div>
+            </div>
+    <!-- 举报内容结束 -->
+    <!-- 问题区域 -->
+    {if condition="$report_detail.qna_type=='qna'"}
+            <div class="content_box" id="content">
+            <div class="header_title split_left"><span class="am-icon-comment" style="color:#900;"></span> 提问者：
+            <img src="{if condition="$qna_userinfo.personal_pic == ''"}/static/images/profile_pic.jpg{else /}{$qna_userinfo.personal_pic}{/if}" class="user_pic_small" style="margin-right:20px;">  <span class="header_title" style="cursor:pointer;" onclick="window.location.href='http://www.beelintown.com.cn/index/userreplydetail?userid={$qna_userinfo.userid}';">{$qna_userinfo.username}</span> {if condition="$qna_userinfo.gender"}{if condition="$qna_userinfo.gender == '1'"}<span class="am-icon-mars" style="color:#06C;" title="男"></span> {else /}<span class="am-icon-venus" style="color:#900;" title="女"></span> {/if}{/if} | <i class="am-icon-mobile"></i> {$qna_userinfo.mobile} {if condition="$qna_userinfo.email != ''"} | <i class="am-icon-envelope"></i> {$qna_userinfo.email}{/if}
+            </div>
+            <div class="split_right" style="padding-top:18px; color:#03C; font-weight:bold;"><span class="am-icon-bitcoin" style="color:#FC0;" title="悬赏"></span> <span id="qna_coins" style="color:#03C;">{$report_detail.formatCoins}</span></div>
+            <div style="clear:both;"></div>
+            {if condition="$qna_userinfo.brief != ''"}<div style="padding-top:10px; padding-bottom:10px;">自我简介：{$qna_userinfo.brief}</div>{/if}
+            {if condition="$qna_tag_list != ''"}<div style="line-height:50px;" class="tagwrap"><span class="am-icon-tags" style="color:#06C;"></span> TA的标签： {volist name="qna_tag_list" id="usertag"}{if condition="$i==6"} <span class="tag_more" onclick="showAllTags('qna');" id="qna_tag_more">更多...</span> <span class="tag" id="qna_tag{$i}" style="display:none;">{$usertag.tag}</span>{else /}{if condition="$i>5"} <span class="tag" id="qna_tag{$i}" style="display:none;">{$usertag.tag}</span>{else /} <span class="tag">{$usertag.tag}</span>{/if}{/if}{/volist} <span class="tag_more" onclick="hideAllTags('qna');" id="qna_tag_less" style="display:none;">收起</span></div>{/if}
+            <div style="padding-top:10px; padding-bottom:10px;">{if condition="$qna_userinfo.location != ''"}<i class="am-icon-map-marker am-icon-fw" style="color:#06C; margin-right:10px;"></i>  居住地：<span style="color:#03C; margin-right:40px;">{$qna_userinfo.location}</span>{/if}
+            {if condition="$qna_userinfo.industry != ''"}<i class="am-icon-suitcase am-icon-fw" style="color:#06C; margin-right:10px;"></i>  所在行业：<span style="color:#03C;">{$qna_userinfo.industry}</span>{/if}</div>
+            <div style="height:10px;"></div>
+            <div class="content_title">{$report_detail.qna_title}</div>
+            <div style="height:10px;"></div>
+            {if condition="$report_detail.qna_thumb_img neq ''"}
+            <div style="width:100%" id="content_text_1">
+                <div style="float:left; padding-left:20px; padding-right:20px; padding-top:5px; text-align:center;" class="am-u-sm-2"><img src="{$reply_detail.qna_thumb_img}" class="thumb_img"></div>
+                <div style="float:left;" class="format_text am-u-sm-10">{$report_detail.qna_content_text} <a href="javascript:void(0)" onclick="viewAll(1);">阅读全文 <span class="am-icon-angle-down" style="color:#09F;"></span></a></div>
+            </div>
+            <div style="clear:both;"></div>
+            {else /}
+            <div id="content_text_1" class="format_text">{$report_detail.qna_content_text} <a href="javascript:void(0)" onclick="viewAll(1);">阅读全文 <span class="am-icon-angle-down" style="color:#09F;"></span></a></div>
+            {/if}
+            <div id="content_html_1" style="display:none;" class="format_text">
+                <div>{$report_detail.qna_content}</div>
+                <div style="text-align:right"><a href="javascript:void(0)" onclick="hideAll(1);">收起 <span class="am-icon-angle-up" style="color:#09F;"></span></a></div>
+            </div>
+            <div style="height:20px;"></div>
+            <div>
+            <div class="grey_text split_left"><!--<span class="am-icon-comments" style="color:#09F;"></span> 35个评论 --><span class="am-icon-star" style="color:#09F;"></span> {$report_detail.followCount}个收藏 <!--<span class="am-icon-heart" style="color:#09F;"></span> 87个赞--></div>
+            <div class="split_right">
+            </div>
+            <div style="clear:both;"></div>
+            <div style="text-align:center;" class="chk_all_answer"><a href="http://www.beelintown.com.cn/index/qnadetails?id={$report_detail.qnaid}" target="_blank"><i class="am-icon-comments"></i> 查看所有回答</a></div>
+            <div style="height:20px;"></div>
+            </div>
+            <div style="height:20px;"></div>
+			</div>
+	{else /}
+            <div class="content_box" id="content">
+            <div class="header_title"><span class="am-icon-comments-o" style="color:#06C;"></span> 回答者：
+            <img src="{if condition="$reply_userinfo.personal_pic == ''"}/static/images/profile_pic.jpg{else /}{$reply_userinfo.personal_pic}{/if}" class="user_pic_small" style="margin-right:20px;">  <span class="header_title" style="cursor:pointer;" onclick="window.location.href='http://www.beelintown.com.cn/index/userreplydetail?userid={$reply_userinfo.userid}';">{$reply_userinfo.username}</span> {if condition="$reply_userinfo.gender != ''"}{if condition="$reply_userinfo.gender == '1'"}<span class="am-icon-mars" style="color:#06C;" title="男"></span> {else /}<span class="am-icon-venus" style="color:#900;" title="女"></span> {/if}{/if} | <i class="am-icon-mobile"></i> {$reply_userinfo.mobile} {if condition="$reply_userinfo.email != ''"} | <i class="am-icon-envelope"></i> {$reply_userinfo.email}{/if}
+            </div>
+            {if condition="$reply_userinfo.brief != ''"}<div style="padding-top:10px; padding-bottom:10px;">自我简介：{$reply_userinfo.brief}</div>{/if}
+            {if condition="$reply_tag_list"} <div style="line-height:50px;" class="tagwrap"><i class="am-icon-tags" style="color:#06C;"></i>  TA的标签： {volist name="reply_tag_list" id="usertag"}{if condition="$i==6"} <span class="tag_more" onclick="showAllTags('reply');" id="reply_tag_more">更多...</span> <span class="tag" id="reply_tag{$i}" style="display:none;">{$usertag.tag}</span>{else /}{if condition="$i>5"} <span class="tag" id="reply_tag{$i}" style="display:none;">{$usertag.tag}</span>{else /} <span class="tag">{$usertag.tag}</span>{/if}{/if}{/volist} <span class="tag_more" onclick="hideAllTags('reply');" id="reply_tag_less" style="display:none;">收起</span></div>{/if}
+            <div style="padding-top:10px; padding-bottom:10px;">{if condition="$reply_userinfo.location != ''"}<i class="am-icon-map-marker am-icon-fw" style="color:#06C; margin-right:10px;"></i>  居住地：<span style="color:#03C; margin-right:40px;">{$reply_userinfo.location}</span>{/if}
+            {if condition="$reply_userinfo.industry != ''"}<i class="am-icon-suitcase am-icon-fw" style="color:#06C; margin-right:10px;"></i>  所在行业：<span style="color:#03C;">{$reply_userinfo.industry}</span>{/if}</div>
+            <div style="height:20px;"></div>
+
+            <div class="content_title">{$report_detail.reply_title}</div>
+            <div style="height:10px;"></div>
+            <!--answer section -->
+
+            <div class="format_text">
+                <div>{$report_detail.reply_content}</div>
+            </div>
+            
+                <!-- 补充提问和回答 -->
+                {volist name="report_detail.addition" id="reply_addition" key="a"}
+                {if condition="$reply_addition.addition_type == '1'"}
+                <div style="padding-left:60px;"><span class="am-icon-commenting" style="color:#900;"></span> 补充提问： </div>
+                {else /}
+                <div style="padding-left:60px;"><span class="am-icon-commenting-o" style="color:#06C;"></span> 补充回答： </div>
+                {/if}
+                {if condition="$reply_addition.thumb_img neq ''"}
+                <div style="width:100%" id="content_text_{$i}_{$a}" class="user_content_left">
+                    <div style="width:180px; float:left; padding-left:40px; padding-right:20px; padding-top:10px; text-align:center;" id="thumb_img"><img src="{$reply_addition.thumb_img}" class="thumb_img"></div>
+                    <div style="width:75%; float:left;" class="format_text">
+                    {$reply_addition.content_text} <a href="javascript:void(0)" onclick="viewAll('{$i}_{$a}');">阅读全文 <span class="am-icon-angle-down" style="color:#09F;"></span></a></div>
+                </div>
+                {else /}
+                <div id="content_text_{$i}_{$a}" class="user_content_left format_text" style="padding-left:60px;">{$reply_addition.content_text} <a href="javascript:void(0)" onclick="viewAll('{$i}_{$a}');">阅读全文 <span class="am-icon-angle-down" style="color:#09F;"></span></a></div>
+                {/if}
+                <div id="content_html_{$i}_{$a}" style="display:none; padding-left:60px;" class="content_html format_text">
+                    <div>{$reply_addition.content}</div>
+                    <div style="text-align:right"><a href="javascript:void(0)" onclick="hideAll('{$i}_{$a}');">收起 <span class="am-icon-angle-up" style="color:#09F;"></span></a></div>
+                </div>
+                <div style="clear:both;"></div>
+                {/volist}
+                <!-- 补充提问和回答结束 -->
+            
+            <!-- answer section end -->
+            <div style="clear:both;"></div>
+            <div style="text-align:center;" class="chk_all_answer"><a href="http://www.beelintown.com.cn/index/qnadetails?id={$report_detail.reply_qnaid}" target="_blank"><i class="am-icon-comments"></i> 查看所有回答</a></div>
+            </div>
+            <div style="height:20px;"></div>
+    {/if}
+    <!-- 问题区域结束 -->
+    </div>
+    </div>
+  </div>
+  <!-- content end -->
+<input type="hidden" name="reportid" id="reportid" value="{$report_detail.reportid}">
+<input type="hidden" name="result_type" id="result_type" value="{$report_detail.result_type}">
+</div>
+
+<footer>
+  <hr>
+  <p class="am-padding-left">© 2014 AllMobilize, Inc. Licensed under MIT license.</p>
+</footer>
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/polyfill/rem.min.js"></script>
+<script src="assets/js/polyfill/respond.min.js"></script>
+<script src="assets/js/amazeui.legacy.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="/static/assets/js/amazeui.min.js"></script>
+<!--<![endif]-->
+<script src="/static/assets/js/app.js"></script>
+<script src="/static/assets/js/qnareport.js"></script>
+</body>
+</html>
